@@ -1,0 +1,21 @@
+{
+    "pomodoroDuration": 25,
+    "shortDuration": 5,
+    "longDuration": 15,
+    "activeTimer": [
+        "pomodoro",
+        "short",
+        "long"
+    ],
+    "remainingTime": 25,
+    "step": [
+        "1/4",
+        "2/4",
+        "3/4",
+        "4/4"
+    ],
+    "message": [
+        "É hora de trabalhar",
+        "É hora de fazer uma pausa"
+    ]
+}
