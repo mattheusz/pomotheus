@@ -1,11 +1,12 @@
-/*
 const SET_POMODORO_DURATION = 'SET_POMODORO_DURATION';
 const SET_SHORT_DURATION = 'SET_SHORT_DURATION';
 const SET_LONG_DURATION = 'SET_LONG_DURATION';
-*/
+
 export const POMODORO_TIMER = 'POMODORO_TIMER';
 export const SHORT_TIMER = 'SHORT_TIMER';
 export const LONG_TIMER = 'LONG_TIMER';
+export const SET_PLAYING = 'SET_PLAYING';
+export const RESET = 'RESET';
 const SET_STEP = 'SET_STEP';
 
 /*
@@ -42,16 +43,44 @@ const shortTimer = (short) => {
     }
 }
 
-export const setActiveTimer = (activeTimer) => {
-    return (dispatch) => {
-        console.log(activeTimer)
-        dispatch(shortTimer(activeTimer))
-
+export const setPlaying = (isPlaying) => {
+    return {
+        type: SET_PLAYING,
+        payload: isPlaying
     }
 }
 
+export const setActiveTimer = (activeTimer, restart) => {
+    return (dispatch) => {
+        console.log(activeTimer);
+        dispatch(shortTimer(activeTimer));
+        dispatch(setPlaying(false));
+        dispatch(reset(restart));
+    }
+}
+
+const reset = (restart) => {
+    return {
+        type: RESET,
+        payload: restart
+    }
+}
+
+export const resetTimer = (restart) => {
+    return (dispatch) => {
+        dispatch(setPlaying(false));
+        dispatch(reset(restart));
+    }
+}
+
+
 const initialState = {
-    activeTimer: 'pomodoro'
+    activeTimer: 'pomodoro',
+    pomodoroDuration: 25,
+    shortDuration: 5,
+    longDuration: 15,
+    isPlaying: false,
+    reset: false
 }
 
 const pomodoroReducer = (state = initialState, action) => {
@@ -72,6 +101,16 @@ const pomodoroReducer = (state = initialState, action) => {
             return {
                 ...state,
                 activeTimer: action.payload
+            }
+        case SET_PLAYING:
+            return {
+                ...state,
+                isPlaying: action.payload
+            }
+        case RESET:
+            return {
+                ...state,
+                reset: action.payload
             }
 
         default:

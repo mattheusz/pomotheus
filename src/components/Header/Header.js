@@ -20,7 +20,8 @@ const StyledHeader = styled(Header)`
     font-size: 2rem;
     color: ${props => props.theme.color.white};
     position: fixed;
-    width: 100%
+    width: 100%;
+    transition: all .6s ease-in;
 `;
 
 export default StyledHeader;
