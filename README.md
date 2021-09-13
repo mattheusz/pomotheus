@@ -11,6 +11,6 @@ O Pomotheus ainda está em estágio inicial, porém possui uma versão totalment
 
 ## Tecnologias utilizadas
 
-- JavaScript
-- CSS
-- React.js
+- JavaScript;
+- CSS;
+- React.js.
