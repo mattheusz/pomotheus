@@ -5,6 +5,7 @@ import { FaRegPlayCircle } from "react-icons/fa";
 import { BsPause } from 'react-icons/bs'
 import { CgUndo } from "react-icons/cg";
 import { resetTimer, setPlaying } from '../../../redux/ducker/pomodoro';
+import { device } from '../../../device';
 
 function PomodoroCardFooter({ activeTimer, isPlaying }) {
 
@@ -49,7 +50,6 @@ const SingleButtonFooter = styled.button`
     border: none;
     padding: .5rem;
     font-size: 1.4rem;
-    border-radius: 0 0 5px 5px;
     width: 100%;
     transition: all .6s;
     display: flex;
@@ -58,6 +58,10 @@ const SingleButtonFooter = styled.button`
 
     &:hover {
         background-color: ${props => props.activeTimer === 'pomodoro' ? props.theme.color.lightRed : props.activeTimer === 'short' ? props.theme.color.lightBlue : props.theme.color.lightGreen};
+    }
+
+    @media ${device.mobileL}{
+        border-radius: 0 0 5px 5px;
     }
 `;
 

@@ -9,6 +9,7 @@ import { setActiveTimer } from "../../redux/ducker/pomodoro";
 import { useCallback } from "react";
 import { useRef } from "react";
 import { setCountdownCircleTimer } from "../../utils/themeUtils";
+import { device } from "../../device";
 
 const children = ({ remainingTime }) => {
     const minutes = Math.floor(remainingTime / 60)
@@ -77,16 +78,22 @@ const PomodoroCard = ({ className }) => {
 }
 
 const StyledPomodoroCard = styled(PomodoroCard)`
-            height: 300px;
-            width: 400px;
-            max-width: 100%;
-            background-color: ${props => props.theme.color.white};
-            border-radius: 10px;
-            box-shadow: 0px 0px 1px ${props => props.theme.color.red};
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            overflow: hidden;
-            `;
+    height: 300px;
+    width: 100vw;
+    max-width: 100%;
+    background-color: ${props => props.theme.color.white};
+    
+    box-shadow: 0px 0px 1px ${props => props.theme.color.red};
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+
+    @media ${device.mobileL}{
+        height: 300px;
+        width: 400px;
+        position: relative;
+        border-radius: 10px;
+    }
+`;
 
 export default StyledPomodoroCard;
