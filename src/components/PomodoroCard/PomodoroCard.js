@@ -5,7 +5,7 @@ import { CountdownCircleTimer } from 'react-countdown-circle-timer';
 import theme from "../../themes/theme";
 import PomodoroCardFooter from "./PomodoroCardFooter/PomodoroCardFooter";
 import { useDispatch, useSelector } from "react-redux";
-import { setActiveTimer } from "../../redux/ducker/pomodoro";
+import { incrementStep, resetStep, setActiveTimer } from "../../redux/ducker/pomodoro";
 import { useCallback } from "react";
 import { useRef } from "react";
 import { setCountdownCircleTimer } from "../../utils/themeUtils";
@@ -17,7 +17,7 @@ const children = ({ remainingTime }) => {
     if (seconds < 10)
         seconds = `0${seconds}`;
 
-    return <span style={{ fontWeight: 'bold' }}>{`${minutes}:${seconds}`}</span>
+    return <span style={{ fontWeight: 'normal', fontSize: '45px' }}>{`${minutes}:${seconds}`}</span>
 }
 
 const PomodoroCard = ({ className }) => {
@@ -30,6 +30,7 @@ const PomodoroCard = ({ className }) => {
     const longDuration = useSelector(state => state.longDuration);
     const isPlaying = useSelector(state => state.isPlaying)
     const reset = useSelector(state => state.reset);
+    const currentStep = useSelector(state => state.currentStep);
 
     const dispatch = useDispatch();
 
@@ -57,17 +58,32 @@ const PomodoroCard = ({ className }) => {
                 <button onClick={() => dispatch(setActiveTimer('long', !reset))}>Pausa Longa</button>
             </StyledPomodoroCardHeader>
             <StyledPomodoroCardBody >
+
                 <CountdownCircleTimer
                     key={reset}
                     isPlaying={isPlaying}
                     duration={initialDuration.current}
                     initialRemainingTime={initialDuration.current}
                     colors={countdownActiveTimerColor.current}
-                    strokeWidth={15}
+                    strokeWidth={10}
                     strokeLinecap="square"
                     ariaLabel="Pomodoro Timer"
                     trailColor={theme.color.gray}
-
+                    onComplete={() => {
+                        if (activeTimer === 'pomodoro') {
+                            if (currentStep < 4) {
+                                dispatch(setActiveTimer('short', !reset));
+                                dispatch(incrementStep());
+                            }
+                            else {
+                                dispatch(setActiveTimer('long', !reset));
+                                dispatch(resetStep());
+                            }
+                        }
+                        else {
+                            dispatch(setActiveTimer('pomodoro', !reset));
+                        }
+                    }}
                 >
                     {children}
                 </CountdownCircleTimer>
@@ -89,7 +105,7 @@ const StyledPomodoroCard = styled(PomodoroCard)`
     overflow: hidden;
 
     @media ${device.mobileL}{
-        height: 300px;
+        height: 320px;
         width: 400px;
         position: relative;
         border-radius: 10px;

@@ -7,7 +7,8 @@ export const SHORT_TIMER = 'SHORT_TIMER';
 export const LONG_TIMER = 'LONG_TIMER';
 export const SET_PLAYING = 'SET_PLAYING';
 export const RESET = 'RESET';
-const SET_STEP = 'SET_STEP';
+export const INCREMENT_STEP = 'INCREMENT_STEP';
+export const RESET_STEP = 'RESET_STEP';
 
 /*
 export const setPomodoroDuration = (duration) => {
@@ -66,6 +67,17 @@ const reset = (restart) => {
     }
 }
 
+export const incrementStep = () => {
+    return {
+        type: INCREMENT_STEP
+    }
+}
+export const resetStep = () => {
+    return {
+        type: RESET_STEP
+    }
+}
+
 export const resetTimer = (restart) => {
     return (dispatch) => {
         dispatch(setPlaying(false));
@@ -80,7 +92,8 @@ const initialState = {
     shortDuration: 5,
     longDuration: 15,
     isPlaying: false,
-    reset: false
+    reset: false,
+    currentStep: 1,
 }
 
 const pomodoroReducer = (state = initialState, action) => {
@@ -112,6 +125,18 @@ const pomodoroReducer = (state = initialState, action) => {
                 ...state,
                 reset: action.payload
             }
+        case INCREMENT_STEP: {
+            return {
+                ...state,
+                currentStep: state.currentStep + 1,
+            }
+        }
+        case RESET_STEP: {
+            return {
+                ...state,
+                currentStep: 1,
+            }
+        }
 
         default:
             return state;

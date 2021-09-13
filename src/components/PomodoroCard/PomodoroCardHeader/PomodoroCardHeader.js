@@ -12,7 +12,7 @@ function PomodoroCardHeader({ children, className }) {
 
 const StyledPomodoroCardHeader = styled(PomodoroCardHeader)`
     border-radius: 5px;
-    height: 60px;
+    height: 70px;
     display:flex;
     
     button{
