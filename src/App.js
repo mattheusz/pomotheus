@@ -30,8 +30,8 @@ const StyledContainer = styled.div`
   position: fixed;
   top: 60px;
   overflow: auto;
-  max-height: calc(100vh - 60px);
-  height: calc(100vh - 60px);
+  max-height: calc(100vh - calc(100vh - 100%) - 60px);
+  height: calc(100vh - calc(100vh - 100%) - 60px);
   width: 100%;
   background-color: ${props => props.theme.color.lightGray};
 `;
