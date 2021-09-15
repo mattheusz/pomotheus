@@ -6,8 +6,13 @@ import { BsPause } from 'react-icons/bs'
 import { CgUndo } from "react-icons/cg";
 import { resetTimer, setPlaying } from '../../../redux/ducker/pomodoro';
 import { device } from '../../../device';
+import useSound from 'use-sound';
+import tickSound from '../../../sounds/tick.mp3';
 
 function PomodoroCardFooter({ activeTimer, isPlaying }) {
+
+    const [play] = useSound(tickSound);
+
 
     const resetState = useSelector(state => state.reset)
     const dispatch = useDispatch();
@@ -18,13 +23,19 @@ function PomodoroCardFooter({ activeTimer, isPlaying }) {
                 <DualButtonContainerFooter>
                     <DualButtonFooter
                         activeTimer={activeTimer}
-                        onClick={() => dispatch(setPlaying(false))}
+                        onClick={() => {
+                            dispatch(setPlaying(false));
+                            play();
+                        }}
                     >
                         <PauseIcon />
                     </DualButtonFooter>
                     <DualButtonFooter
                         activeTimer={activeTimer}
-                        onClick={() => dispatch(resetTimer(!resetState))}
+                        onClick={() => {
+                            dispatch(resetTimer(!resetState))
+                            play();
+                        }}
                     >
                         <ResetIcon />
                     </DualButtonFooter>
@@ -32,7 +43,10 @@ function PomodoroCardFooter({ activeTimer, isPlaying }) {
                 </DualButtonContainerFooter> :
                 <SingleButtonFooter
                     activeTimer={activeTimer}
-                    onClick={() => dispatch(setPlaying(true))}
+                    onClick={() => {
+                        dispatch(setPlaying(true));
+                        play();
+                    }}
                 >
                     <PlayIcon />
                 </SingleButtonFooter>

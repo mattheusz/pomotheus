@@ -10,6 +10,10 @@ import { useCallback } from "react";
 import { useRef } from "react";
 import { setCountdownCircleTimer } from "../../utils/themeUtils";
 import { device } from "../../device";
+import toast from 'react-hot-toast';
+import useSound from 'use-sound';
+import alarm from '../../sounds/finish_task_alarm.mp3';
+
 
 const children = ({ remainingTime }) => {
     const minutes = Math.floor(remainingTime / 60)
@@ -33,6 +37,8 @@ const PomodoroCard = ({ className }) => {
     const reset = useSelector(state => state.reset);
     const currentStep = useSelector(state => state.currentStep);
 
+    const [play] = useSound(alarm);
+
     const dispatch = useDispatch();
 
     const setInitialDuration = () => {
@@ -51,15 +57,22 @@ const PomodoroCard = ({ className }) => {
     countdownActiveTimerColor.current = setCountdownCircleTimer(activeTimer);
     console.log('initial duration:', initialDuration.current);
 
+    const changeActiveTimer = (activeTimer, reset) => {
+        if (isPlaying) {
+            window.confirm("Tem certeza que deseja mudar o temporizador?")
+        }
+        dispatch(setActiveTimer(activeTimer, reset))
+    }
+
     return (
         <div className={className}>
             <StyledPomodoroCardHeader activeTimer={activeTimer}>
-                <button onClick={() => dispatch(setActiveTimer('pomodoro', !reset))}>Pomodoro</button>
-                <button onClick={() => dispatch(setActiveTimer('short', !reset))}>Pausa Curta</button>
-                <button onClick={() => dispatch(setActiveTimer('long', !reset))}>Pausa Longa</button>
+                <button onClick={() => changeActiveTimer('pomodoro', !reset)}>Pomodoro</button>
+                <button onClick={() => changeActiveTimer('short', !reset)}>Pausa Curta</button>
+                <button onClick={() => changeActiveTimer('long', !reset)}>Pausa Longa</button>
             </StyledPomodoroCardHeader>
-            <StyledPomodoroCardBody >
-                <span style={{ position: 'absolute', top: '65px', color: theme.color.red, fontSize: '20px' }}>
+            <StyledPomodoroCardBody activeTimer={activeTimer}>
+                <span style={{ position: 'absolute', top: '63px', fontSize: '20px' }}>
                     {currentStep}/4
                 </span>
 
@@ -76,16 +89,34 @@ const PomodoroCard = ({ className }) => {
                     onComplete={() => {
                         if (activeTimer === 'pomodoro') {
                             if (currentStep < 4) {
+                                play();
                                 dispatch(setActiveTimer('short', !reset));
-                                dispatch(incrementStep());
+                                toast('Bom trabalho! Hora do descanso.', {
+                                    icon: '👏',
+                                });
                             }
                             else {
+                                play();
+                                toast('Bom trabalho! Agora descanse mais a vontade!', {
+                                    icon: '👏',
+                                });
                                 dispatch(setActiveTimer('long', !reset));
-                                dispatch(resetStep());
                             }
                         }
-                        else {
+                        else if (activeTimer === 'short') {
+                            play();
+                            toast('É hora de trabalhar! Let\'s go!', {
+                                icon: '👋',
+                            });
                             dispatch(setActiveTimer('pomodoro', !reset));
+                            dispatch(incrementStep());
+                        } else {
+                            play();
+                            toast('É hora de voltar! Let\'s go!', {
+                                icon: '👋',
+                            });
+                            dispatch(setActiveTimer('pomodoro', !reset));
+                            dispatch(resetStep());
                         }
                     }}
                 >
@@ -107,6 +138,8 @@ const StyledPomodoroCard = styled(PomodoroCard)`
     display: flex;
     flex-direction: column;
     overflow: hidden;
+
+    
 
     @media ${device.mobileL}{
         height: 320px;

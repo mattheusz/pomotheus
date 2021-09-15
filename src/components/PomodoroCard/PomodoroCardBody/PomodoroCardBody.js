@@ -26,6 +26,9 @@ const StyledPomodoroCardBody = styled(PomodoroCardBody)`
         max-width: 100%;
         max-height: 100%;
     }
+    span{
+        color: ${props => props.activeTimer === 'pomodoro' ? props.theme.color.red : props.activeTimer === 'short' ? props.theme.color.blue : props.theme.color.green}
+    }
 `;
 
 export default StyledPomodoroCardBody;

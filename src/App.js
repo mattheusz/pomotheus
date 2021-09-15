@@ -6,6 +6,7 @@ import Wrapper from './components/Wrapper';
 import StyledHeader from './components/Header';
 import StyledMain from './components/Main';
 import { useSelector } from 'react-redux';
+import { Toaster } from 'react-hot-toast';
 
 function App() {
   const activeTimer = useSelector(state => state.activeTimer)
@@ -16,6 +17,9 @@ function App() {
         <StyledContainer>
           <StyledMain />
         </StyledContainer>
+        <Toaster
+          position="top-right"
+        />
 
       </Wrapper>
     </ThemeProvider>
