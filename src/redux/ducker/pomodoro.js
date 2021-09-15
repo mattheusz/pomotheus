@@ -88,9 +88,9 @@ export const resetTimer = (restart) => {
 
 const initialState = {
     activeTimer: 'pomodoro',
-    pomodoroDuration: .1,
-    shortDuration: .1,
-    longDuration: .1,
+    pomodoroDuration: 25,
+    shortDuration: 5,
+    longDuration: 15,
     isPlaying: false,
     reset: false,
     currentStep: 1,
