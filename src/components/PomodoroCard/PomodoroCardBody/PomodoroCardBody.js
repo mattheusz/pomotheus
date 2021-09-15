@@ -13,6 +13,7 @@ const StyledPomodoroCardBody = styled(PomodoroCardBody)`
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
     flex-basis: 100%;
     flex-grow: 1;
     position: relative;

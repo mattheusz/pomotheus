@@ -17,7 +17,8 @@ const children = ({ remainingTime }) => {
     if (seconds < 10)
         seconds = `0${seconds}`;
 
-    return <span style={{ fontWeight: 'normal', fontSize: '45px' }}>{`${minutes}:${seconds}`}</span>
+    return <div style={{ fontWeight: 'normal', fontSize: '45px' }}>{`${minutes}:${seconds}`}</div>
+
 }
 
 const PomodoroCard = ({ className }) => {
@@ -58,6 +59,9 @@ const PomodoroCard = ({ className }) => {
                 <button onClick={() => dispatch(setActiveTimer('long', !reset))}>Pausa Longa</button>
             </StyledPomodoroCardHeader>
             <StyledPomodoroCardBody >
+                <span style={{ position: 'absolute', top: '65px', color: theme.color.red, fontSize: '20px' }}>
+                    {currentStep}/4
+                </span>
 
                 <CountdownCircleTimer
                     key={reset}
@@ -89,7 +93,7 @@ const PomodoroCard = ({ className }) => {
                 </CountdownCircleTimer>
             </StyledPomodoroCardBody>
             <PomodoroCardFooter activeTimer={activeTimer} isPlaying={isPlaying} />
-        </div>
+        </div >
     )
 }
 
