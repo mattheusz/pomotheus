@@ -134,7 +134,7 @@ const StyledPomodoroCard = styled(PomodoroCard)`
     max-width: 100%;
     background-color: ${props => props.theme.color.white};
     
-    box-shadow: 0px 0px 1px ${props => props.theme.color.red};
+    box-shadow: 0px 0px 1px ${props => props.activeTimer === 'pomodoro' ? props.theme.color.red : props.activeTimer === 'short' ? props.theme.color.blue : props.theme.color.green};
     display: flex;
     flex-direction: column;
     overflow: hidden;
