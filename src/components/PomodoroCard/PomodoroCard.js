@@ -6,7 +6,7 @@ import theme from "../../themes/theme";
 import PomodoroCardFooter from "./PomodoroCardFooter/PomodoroCardFooter";
 import { useDispatch, useSelector } from "react-redux";
 import { incrementStep, resetStep, setActiveTimer } from "../../redux/ducker/pomodoro";
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { useRef } from "react";
 import { setCountdownCircleTimer } from "../../utils/themeUtils";
 import { device } from "../../device";
@@ -36,6 +36,15 @@ const PomodoroCard = ({ className }) => {
     const isPlaying = useSelector(state => state.isPlaying)
     const reset = useSelector(state => state.reset);
     const currentStep = useSelector(state => state.currentStep);
+
+    // test audio
+
+    var audio = new Audio(alarm);
+    /*
+    useEffect(() => {
+        new Audio(alarm).play();
+    }, [])
+    */
 
     const [play] = useSound(alarm);
 
@@ -89,14 +98,14 @@ const PomodoroCard = ({ className }) => {
                     onComplete={() => {
                         if (activeTimer === 'pomodoro') {
                             if (currentStep < 4) {
-                                play();
+                                window.setTimeout(new Audio(alarm).play(), 1);
                                 dispatch(setActiveTimer('short', !reset));
                                 toast('Bom trabalho! Hora do descanso.', {
                                     icon: '👏',
                                 });
                             }
                             else {
-                                play();
+                                new Audio(alarm).play();
                                 toast('Bom trabalho! Agora descanse mais a vontade!', {
                                     icon: '👏',
                                 });
@@ -104,14 +113,14 @@ const PomodoroCard = ({ className }) => {
                             }
                         }
                         else if (activeTimer === 'short') {
-                            play();
+                            new Audio(alarm).play();
                             toast('É hora de trabalhar! Let\'s go!', {
                                 icon: '👋',
                             });
                             dispatch(setActiveTimer('pomodoro', !reset));
                             dispatch(incrementStep());
                         } else {
-                            play();
+                            new Audio(alarm).play();
                             toast('É hora de voltar! Let\'s go!', {
                                 icon: '👋',
                             });
