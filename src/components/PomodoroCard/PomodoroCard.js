@@ -70,6 +70,15 @@ const PomodoroCard = ({ className }) => {
     }
     setInitialDuration();
 
+    const callWorker = () => {
+        worker.postMessage(true);
+        worker.onmessage = e => {
+            console.debug('Audio chegando', e.data)
+            let audio = new Audio(alarm);
+            audio.play();
+        }
+    }
+
     countdownActiveTimerColor.current = setCountdownCircleTimer(activeTimer);
     console.log('initial duration:', initialDuration.current);
 
@@ -107,22 +116,19 @@ const PomodoroCard = ({ className }) => {
                         if (activeTimer === 'pomodoro') {
                             if (currentStep < 4) {
                                 console.log("Worker", worker)
-                                worker.postMessage(true);
-                                worker.onmessage = e => {
-                                    console.debug('Audio chegando', e.data)
-                                    let audio = new Audio(alarm);
-                                    audio.play();
-                                }
+                                callWorker();
                                 dispatch(setActiveTimer('short', !reset));
                                 toast('Bom trabalho! Hora do descanso.', {
                                     icon: '👏',
                                 });
                             }
                             else {
+                                callWorker();
                                 toast('Bom trabalho! Agora descanse mais a vontade!', {
                                     icon: '👏',
                                 });
                                 dispatch(setActiveTimer('long', !reset));
+
                             }
                         }
                         else if (activeTimer === 'short') {

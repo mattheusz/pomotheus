@@ -27,6 +27,7 @@ function PomodoroCardFooter({ activeTimer, isPlaying }) {
                             dispatch(setPlaying(false));
                             play();
                         }}
+                        aria-label='Pausar'
                     >
                         <PauseIcon />
                     </DualButtonFooter>
@@ -47,11 +48,12 @@ function PomodoroCardFooter({ activeTimer, isPlaying }) {
                         dispatch(setPlaying(true));
                         play();
                     }}
+                    aria-label='Reproduzir'
                 >
                     <PlayIcon />
                 </SingleButtonFooter>
             }
-        </div>
+        </div >
     );
 }
 
