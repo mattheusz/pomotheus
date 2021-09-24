@@ -12,7 +12,7 @@ import { setCountdownCircleTimer } from "../../utils/themeUtils";
 import { device } from "../../device";
 import toast from 'react-hot-toast';
 import useSound from 'use-sound';
-import alarm from '../../sounds/finish_task_alarm.mp3';
+import alarm from '../../sounds/finish_task_alarm.mp3'
 
 
 const children = ({ remainingTime }) => {
@@ -37,16 +37,23 @@ const PomodoroCard = ({ className }) => {
     const reset = useSelector(state => state.reset);
     const currentStep = useSelector(state => state.currentStep);
 
-    // test audio
+    let worker = new Worker("worker.js");
 
-    var audio = new Audio(alarm);
-    /*
+
     useEffect(() => {
-        new Audio(alarm).play();
-    }, [])
-    */
+        if (!("Notification" in window)) {
+            console.log('Esse browser não suporta notificações desktop');
+        } else {
+            console.log('Esse browser SUPORTA notificações desktop');
+            if (Notification.permission !== 'denied') {
+                // Pede ao usuário para utilizar a Notificação Desktop
+                Notification.requestPermission();
+            }
+        }
+        setTimeout(() => new Notification('Sessão terminada! Parabéns!'), 3000)
 
-    const [play] = useSound(alarm);
+    }, [])
+
 
     const dispatch = useDispatch();
 
@@ -96,16 +103,22 @@ const PomodoroCard = ({ className }) => {
                     ariaLabel="Pomodoro Timer"
                     trailColor={theme.color.gray}
                     onComplete={() => {
+                        console.log('COMPLETED TIMER')
                         if (activeTimer === 'pomodoro') {
                             if (currentStep < 4) {
-                                window.setTimeout(new Audio(alarm).play(), 1);
+                                console.log("Worker", worker)
+                                worker.postMessage(true);
+                                worker.onmessage = e => {
+                                    console.debug('Audio chegando', e.data)
+                                    let audio = new Audio(alarm);
+                                    audio.play();
+                                }
                                 dispatch(setActiveTimer('short', !reset));
                                 toast('Bom trabalho! Hora do descanso.', {
                                     icon: '👏',
                                 });
                             }
                             else {
-                                new Audio(alarm).play();
                                 toast('Bom trabalho! Agora descanse mais a vontade!', {
                                     icon: '👏',
                                 });
@@ -113,14 +126,12 @@ const PomodoroCard = ({ className }) => {
                             }
                         }
                         else if (activeTimer === 'short') {
-                            new Audio(alarm).play();
                             toast('É hora de trabalhar! Let\'s go!', {
                                 icon: '👋',
                             });
                             dispatch(setActiveTimer('pomodoro', !reset));
                             dispatch(incrementStep());
                         } else {
-                            new Audio(alarm).play();
                             toast('É hora de voltar! Let\'s go!', {
                                 icon: '👋',
                             });
