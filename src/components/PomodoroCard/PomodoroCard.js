@@ -78,9 +78,11 @@ const PomodoroCard = ({ className }) => {
 
     const changeActiveTimer = (activeTimer, reset) => {
         if (isPlaying) {
-            window.confirm("Tem certeza que deseja mudar o temporizador?")
+            if (window.confirm("Tem certeza que deseja mudar o temporizador?")) {
+                dispatch(setActiveTimer(activeTimer, reset))
+            }
         }
-        dispatch(setActiveTimer(activeTimer, reset))
+
     }
 
     return (

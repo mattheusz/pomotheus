@@ -6,12 +6,13 @@ import { BsPause } from 'react-icons/bs'
 import { CgUndo } from "react-icons/cg";
 import { resetTimer, setPlaying } from '../../../redux/ducker/pomodoro';
 import { device } from '../../../device';
-import useSound from 'use-sound';
 import tickSound from '../../../sounds/tick.mp3';
 
 function PomodoroCardFooter({ activeTimer, isPlaying }) {
 
-    const [play] = useSound(tickSound);
+    const play = () => {
+        new Audio(tickSound).play();
+    }
 
 
     const resetState = useSelector(state => state.reset)
