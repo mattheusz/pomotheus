@@ -1,5 +1,5 @@
 # Pomotheus
-[pomotheusapp.png](https://postimg.cc/G8wgYm9R)
+![Pomothrud](https://postimg.cc/G8wgYm9R)
 
 O Pomotheus é um temporizador pomodoro simples baseado na biblioteca React.js. O seu principal objetivo é fornecer, de forma simples e intuitiva, um monitoramento de sua produtividade usando a técnica Pomodoro.
 
