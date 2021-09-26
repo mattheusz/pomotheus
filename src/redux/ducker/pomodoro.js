@@ -1,6 +1,3 @@
-const SET_POMODORO_DURATION = 'SET_POMODORO_DURATION';
-const SET_SHORT_DURATION = 'SET_SHORT_DURATION';
-const SET_LONG_DURATION = 'SET_LONG_DURATION';
 
 export const POMODORO_TIMER = 'POMODORO_TIMER';
 export const SHORT_TIMER = 'SHORT_TIMER';
@@ -30,14 +27,7 @@ export const setLongDuration = (duration) => {
     }
 }
 */
-
-const pomodoroTimer = (short) => {
-    return {
-        type: POMODORO_TIMER,
-        payload: short
-    }
-}
-const shortTimer = (short) => {
+const setTimer = (short) => {
     return {
         type: SHORT_TIMER,
         payload: short
@@ -54,7 +44,7 @@ export const setPlaying = (isPlaying) => {
 export const setActiveTimer = (activeTimer, restart) => {
     return (dispatch) => {
         console.log(activeTimer);
-        dispatch(shortTimer(activeTimer));
+        dispatch(setTimer(activeTimer));
         dispatch(setPlaying(false));
         dispatch(reset(restart));
     }
@@ -88,16 +78,15 @@ export const resetTimer = (restart) => {
 
 const initialState = {
     activeTimer: 'pomodoro',
-    pomodoroDuration: .1,
-    shortDuration: .1,
-    longDuration: .1,
+    pomodoroDuration: 25,
+    shortDuration: 5,
+    longDuration: 15,
     isPlaying: false,
     reset: false,
     currentStep: 1,
 }
 
 const pomodoroReducer = (state = initialState, action) => {
-    console.log('action payload', action.payload);
     switch (action.type) {
 
         case POMODORO_TIMER:

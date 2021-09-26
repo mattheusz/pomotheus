@@ -6,13 +6,11 @@ import theme from "../../themes/theme";
 import PomodoroCardFooter from "./PomodoroCardFooter/PomodoroCardFooter";
 import { useDispatch, useSelector } from "react-redux";
 import { incrementStep, resetStep, setActiveTimer } from "../../redux/ducker/pomodoro";
-import { useCallback, useEffect } from "react";
+import { useEffect } from "react";
 import { useRef } from "react";
 import { setCountdownCircleTimer } from "../../utils/themeUtils";
 import { device } from "../../device";
-import toast from 'react-hot-toast';
-import useSound from 'use-sound';
-import alarm from '../../sounds/finish_task_alarm.mp3'
+import toast from 'react-hot-toast'; import alarm from '../../sounds/finish_task_alarm.mp3'
 
 
 const children = ({ remainingTime }) => {
@@ -42,15 +40,12 @@ const PomodoroCard = ({ className }) => {
 
     useEffect(() => {
         if (!("Notification" in window)) {
-            console.log('Esse browser não suporta notificações desktop');
         } else {
-            console.log('Esse browser SUPORTA notificações desktop');
             if (Notification.permission !== 'denied') {
                 // Pede ao usuário para utilizar a Notificação Desktop
                 Notification.requestPermission();
             }
         }
-        setTimeout(() => new Notification('Sessão terminada! Parabéns!'), 3000)
 
     }, [])
 
@@ -70,17 +65,16 @@ const PomodoroCard = ({ className }) => {
     }
     setInitialDuration();
 
-    const callWorker = () => {
-        worker.postMessage(true);
+    const callWorker = timer => {
+        console.log('visibility', document.hidden)
+        worker.postMessage({ showNotification: !document.hidden ? true : false, timer });
         worker.onmessage = e => {
-            console.debug('Audio chegando', e.data)
             let audio = new Audio(alarm);
             audio.play();
         }
     }
 
     countdownActiveTimerColor.current = setCountdownCircleTimer(activeTimer);
-    console.log('initial duration:', initialDuration.current);
 
     const changeActiveTimer = (activeTimer, reset) => {
         if (isPlaying) {
@@ -116,14 +110,14 @@ const PomodoroCard = ({ className }) => {
                         if (activeTimer === 'pomodoro') {
                             if (currentStep < 4) {
                                 console.log("Worker", worker)
-                                callWorker();
+                                callWorker('pomodoro');
                                 dispatch(setActiveTimer('short', !reset));
                                 toast('Bom trabalho! Hora do descanso.', {
                                     icon: '👏',
                                 });
                             }
                             else {
-                                callWorker();
+                                callWorker('pomodoro');
                                 toast('Bom trabalho! Agora descanse mais a vontade!', {
                                     icon: '👏',
                                 });
@@ -132,12 +126,14 @@ const PomodoroCard = ({ className }) => {
                             }
                         }
                         else if (activeTimer === 'short') {
+                            callWorker('short');
                             toast('É hora de trabalhar! Let\'s go!', {
                                 icon: '👋',
                             });
                             dispatch(setActiveTimer('pomodoro', !reset));
                             dispatch(incrementStep());
                         } else {
+                            callWorker('long');
                             toast('É hora de voltar! Let\'s go!', {
                                 icon: '👋',
                             });
